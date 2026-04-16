@@ -1,0 +1,18 @@
+{
+  "name": "lg-product-site",
+  "version": "1.0.0",
+  "description": "LG sample product site with Queue-it connector",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "node api/index.js"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "express": "^4.18.2",
+    "@queue-it/connector-javascript": "^5.0.1",
+    "@queue-it/queue-token": "^1.0.4"
+  },
+  "devDependencies": {
+    "vercel": "^33.0.0"
+  }
+}
