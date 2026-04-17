@@ -15,55 +15,64 @@ const app = express();
 
 // ── Core middleware ────────────────────────────────────────────────────────
 app.use(express.json());
-app.use(cookieParser()); // Required by Queue-it to read/write cookies
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "..", "public")));
 
 // ── Queue-it: validate every request before reaching your routes ───────────
 app.use(queueItMiddleware);
 
-// ── Routes ─────────────────────────────────────────────────────────────────
+// ── Page routes ────────────────────────────────────────────────────────────
+
+app.get("/", (_req, res) => {
+  res.sendFile(path.join(__dirname, "..", "public", "index.html"));
+});
+
+app.get("/tv", (_req, res) => {
+  res.sendFile(path.join(__dirname, "..", "public", "tv.html"));
+});
+
+app.get("/ac", (_req, res) => {
+  res.sendFile(path.join(__dirname, "..", "public", "ac.html"));
+});
+
+// ── API routes ─────────────────────────────────────────────────────────────
 
 /**
  * POST /api/product
  *
  * Receives product view data from the frontend on page load.
- * Only reached if the user has passed the Queue-it waiting room.
+ * The Referer header tells you which page sent the request:
+ *   - Referer: .../tv  -> TV page view
+ *   - Referer: .../ac  -> AC page view
  */
 app.post("/api/product", (req, res) => {
   const product = req.body;
+  const referer = req.headers["referer"] || req.headers["referrer"] || "unknown";
 
   if (!product || !product.name) {
     return res.status(400).json({ error: "Missing product data" });
   }
 
-  // Log to server console (visible in Vercel's function logs)
   console.log("📦 Product view received:", {
-    id:        product.id,
-    name:      product.name,
-    price:     product.priceUSD,
-    viewedAt:  product.viewedAt,
+    id:       product.id,
+    name:     product.name,
+    category: product.category,
+    price:    product.priceUSD,
+    viewedAt: product.viewedAt,
+    referer,
   });
 
   return res.status(200).json({
     success:   true,
     message:   `Product "${product.name}" received by server.`,
     timestamp: new Date().toISOString(),
+    referer,
     received:  product,
   });
 });
 
-/**
- * GET /api/health
- * Simple health-check endpoint.
- */
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-// ── Fallback: serve index.html for any unmatched GET (SPA-style) ──────────
-app.get("*", (_req, res) => {
-  res.sendFile(path.join(__dirname, "..", "public", "index.html"));
-});
-
-// ── Export for Vercel (serverless) ────────────────────────────────────────
 module.exports = app;

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LG C4 OLED TV — Life's Good</title>
+  <title>LG Electronics — Life's Good</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
   <style>
@@ -14,144 +14,82 @@
       --border: rgba(255,255,255,0.07); --text: #f0f0f0; --muted: #777;
       --font-display: 'Unbounded', sans-serif; --font-body: 'DM Sans', sans-serif;
     }
-    html { scroll-behavior: smooth; }
     body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; overflow-x: hidden; }
     nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 64px; background: rgba(8,8,8,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
     .nav-logo { font-family: var(--font-display); font-weight: 900; font-size: 22px; letter-spacing: -0.5px; }
     .nav-logo span { color: var(--lg-red); }
     .nav-links { display: flex; gap: 32px; list-style: none; }
     .nav-links a { color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 400; letter-spacing: 0.5px; text-transform: uppercase; transition: color 0.2s; }
-    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
     .nav-tag { font-size: 11px; color: var(--muted); font-family: var(--font-display); font-weight: 300; letter-spacing: 1px; text-transform: uppercase; }
-    .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 120px 48px 80px; position: relative; overflow: hidden; }
-    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 50% 80%, rgba(165,0,52,0.12) 0%, transparent 70%), radial-gradient(ellipse 40% 30% at 80% 20%, rgba(165,0,52,0.06) 0%, transparent 60%); pointer-events: none; }
+
+    /* Hero */
+    .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 120px 48px 80px; text-align: center; }
     .hero-eyebrow { font-family: var(--font-display); font-size: 10px; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: var(--lg-red); margin-bottom: 24px; opacity: 0; animation: fadeUp 0.6s 0.2s forwards; }
-    .hero-title { font-family: var(--font-display); font-size: clamp(52px, 9vw, 120px); font-weight: 900; line-height: 0.92; letter-spacing: -3px; text-align: center; margin-bottom: 12px; opacity: 0; animation: fadeUp 0.7s 0.35s forwards; }
-    .hero-title .model { color: var(--lg-red); display: block; }
-    .hero-subtitle { font-size: clamp(13px, 1.5vw, 16px); font-weight: 300; color: var(--muted); text-align: center; letter-spacing: 0.3px; max-width: 480px; line-height: 1.7; margin-top: 24px; opacity: 0; animation: fadeUp 0.7s 0.5s forwards; }
-    .tv-wrap { margin: 60px 0 40px; position: relative; opacity: 0; animation: fadeUp 0.9s 0.6s forwards; }
-    .tv { width: clamp(300px, 60vw, 700px); aspect-ratio: 16/10; background: linear-gradient(135deg, #1c1c1c 0%, #0d0d0d 100%); border-radius: 12px 12px 4px 4px; border: 2px solid #2a2a2a; position: relative; box-shadow: 0 0 0 1px #333, 0 40px 80px rgba(0,0,0,0.8), 0 0 120px rgba(165,0,52,0.08); overflow: hidden; }
-    .tv-screen { position: absolute; inset: 8px; border-radius: 6px; background: linear-gradient(160deg, #0a0f1e 0%, #050810 40%, #0d0305 100%); overflow: hidden; display: flex; align-items: center; justify-content: center; }
-    .tv-screen::after { content: ''; position: absolute; inset: 0; background: linear-gradient(120deg, rgba(255,255,255,0.015) 0%, transparent 50%, rgba(0,0,0,0.1) 100%); }
-    .tv-glow { position: absolute; width: 60%; height: 50%; background: radial-gradient(ellipse, rgba(20,60,180,0.4) 0%, transparent 70%); animation: glowPulse 4s ease-in-out infinite alternate; }
-    .tv-glow-red { width: 40%; height: 40%; right: 10%; bottom: 10%; background: radial-gradient(ellipse, rgba(165,0,52,0.3) 0%, transparent 70%); animation: glowPulse 3s 1s ease-in-out infinite alternate; }
-    .tv-text-inner { position: relative; z-index: 2; text-align: center; }
-    .tv-text-inner span { font-family: var(--font-display); font-size: clamp(14px, 2.5vw, 28px); font-weight: 700; letter-spacing: 6px; text-transform: uppercase; color: rgba(255,255,255,0.85); }
-    .tv-text-inner small { display: block; font-size: 10px; letter-spacing: 2px; color: rgba(255,255,255,0.3); margin-top: 6px; font-family: var(--font-body); }
-    .tv-stand { width: 22%; height: 18px; background: linear-gradient(to bottom, #222, #1a1a1a); margin: 0 auto; clip-path: polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%); border-bottom: 2px solid #333; }
-    .tv-base { width: 34%; height: 6px; background: #1e1e1e; border-radius: 3px; margin: 0 auto; border: 1px solid #2d2d2d; }
-    .api-status { display: inline-flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: 10px 20px; font-size: 13px; margin-top: 8px; opacity: 0; animation: fadeUp 0.7s 1.1s forwards; transition: border-color 0.4s; }
-    .api-status.success { border-color: rgba(0,200,100,0.3); }
-    .api-status.error { border-color: rgba(165,0,52,0.4); }
-    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
-    .dot.pulsing { background: #f59e0b; box-shadow: 0 0 0 0 rgba(245,158,11,0.4); animation: pulse 1.2s infinite; }
-    .dot.ok { background: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,0.5); }
-    .dot.err { background: var(--lg-red); }
-    .api-label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
-    .api-msg { color: var(--text); font-weight: 400; }
-    .specs-section { padding: 80px 48px; max-width: 1100px; margin: 0 auto; opacity: 0; animation: fadeUp 0.8s 1.3s forwards; }
-    .section-label { font-family: var(--font-display); font-size: 10px; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: var(--lg-red); margin-bottom: 40px; }
-    .specs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-    .spec-card { background: var(--surface); padding: 28px 24px; transition: background 0.2s; }
-    .spec-card:hover { background: var(--surface2); }
-    .spec-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 8px; font-family: var(--font-display); font-weight: 300; }
-    .spec-value { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text); line-height: 1.2; }
-    .spec-value small { font-size: 11px; font-weight: 300; color: var(--muted); display: block; margin-top: 3px; font-family: var(--font-body); }
-    .cta-row { display: flex; align-items: center; gap: 16px; justify-content: center; padding: 40px 48px 80px; opacity: 0; animation: fadeUp 0.8s 1.5s forwards; }
-    .btn-primary { background: var(--lg-red); color: #fff; border: none; cursor: pointer; font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 16px 36px; border-radius: 4px; transition: background 0.2s, transform 0.15s; }
-    .btn-primary:hover { background: var(--lg-red-bright); transform: translateY(-1px); }
-    .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); cursor: pointer; font-family: var(--font-display); font-size: 11px; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; padding: 16px 36px; border-radius: 4px; transition: border-color 0.2s, transform 0.15s; }
-    .btn-outline:hover { border-color: rgba(255,255,255,0.25); transform: translateY(-1px); }
+    .hero-title { font-family: var(--font-display); font-size: clamp(48px, 8vw, 100px); font-weight: 900; line-height: 0.95; letter-spacing: -3px; margin-bottom: 28px; opacity: 0; animation: fadeUp 0.7s 0.35s forwards; }
+    .hero-title span { color: var(--lg-red); }
+    .hero-subtitle { font-size: 15px; font-weight: 300; color: var(--muted); max-width: 460px; line-height: 1.7; margin-bottom: 48px; opacity: 0; animation: fadeUp 0.7s 0.5s forwards; }
+
+    /* Product cards */
+    .cards { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s 0.65s forwards; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 36px 32px; width: 240px; text-decoration: none; color: var(--text); transition: border-color 0.2s, transform 0.2s, background 0.2s; display: flex; flex-direction: column; gap: 12px; }
+    .card:hover { border-color: rgba(165,0,52,0.4); transform: translateY(-4px); background: var(--surface2); }
+    .card-icon { font-size: 36px; }
+    .card-title { font-family: var(--font-display); font-size: 14px; font-weight: 700; letter-spacing: -0.3px; }
+    .card-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .card-link { font-family: var(--font-display); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--lg-red); margin-top: auto; }
+
     footer { border-top: 1px solid var(--border); padding: 32px 48px; display: flex; align-items: center; justify-content: space-between; }
     footer span { font-size: 12px; color: var(--muted); }
     .footer-logo { font-family: var(--font-display); font-weight: 900; font-size: 16px; color: var(--muted); }
     .footer-logo span { color: var(--lg-red); }
+
     @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes glowPulse { from { opacity: 0.6; transform: scale(0.95); } to { opacity: 1; transform: scale(1.05); } }
-    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(245,158,11,0.4); } 70% { box-shadow: 0 0 0 8px rgba(245,158,11,0); } 100% { box-shadow: 0 0 0 0 rgba(245,158,11,0); } }
-    @media (max-width: 640px) { nav { padding: 0 20px; } .nav-links, .nav-tag { display: none; } .hero { padding: 100px 24px 60px; } .specs-section { padding: 60px 24px; } .cta-row { flex-direction: column; padding: 24px 24px 60px; } footer { padding: 24px; flex-direction: column; gap: 12px; text-align: center; } }
+    @media (max-width: 640px) { nav { padding: 0 20px; } .nav-links, .nav-tag { display: none; } .hero { padding: 100px 24px 60px; } footer { padding: 24px; flex-direction: column; gap: 12px; text-align: center; } }
   </style>
 </head>
 <body>
 <nav>
   <div class="nav-logo">L<span>G</span></div>
   <ul class="nav-links">
-    <li><a href="#">TVs</a></li><li><a href="#">Appliances</a></li>
-    <li><a href="#">Mobile</a></li><li><a href="#">Support</a></li>
+    <li><a href="/" class="active">Home</a></li>
+    <li><a href="/tv">TVs</a></li>
+    <li><a href="/ac">Air Conditioners</a></li>
+    <li><a href="#">Support</a></li>
   </ul>
   <div class="nav-tag">Life's Good</div>
 </nav>
 <main>
   <section class="hero">
-    <p class="hero-eyebrow">New — 2024 Lineup</p>
-    <h1 class="hero-title">OLED EVO <span class="model">C4 Series</span></h1>
-    <div class="tv-wrap">
-      <div class="tv">
-        <div class="tv-screen">
-          <div class="tv-glow"></div>
-          <div class="tv-glow tv-glow-red"></div>
-          <div class="tv-text-inner"><span>LG OLED</span><small>α9 AI Processor Gen7</small></div>
-        </div>
-      </div>
-      <div class="tv-stand"></div>
-      <div class="tv-base"></div>
-    </div>
-    <p class="hero-subtitle">Self-lit pixels. Infinite contrast. The C4 redefines what a picture can be — powered by the α9 Gen7 AI processor.</p>
-    <div class="api-status" id="apiStatus">
-      <div class="dot pulsing" id="dot"></div>
-      <span class="api-label">API</span>
-      <span class="api-msg" id="apiMsg">Sending product data…</span>
-    </div>
-  </section>
-  <section class="specs-section">
-    <p class="section-label">Specifications</p>
-    <div class="specs-grid">
-      <div class="spec-card"><div class="spec-label">Display</div><div class="spec-value">OLED EVO <small>Self-Lit Pixels</small></div></div>
-      <div class="spec-card"><div class="spec-label">Resolution</div><div class="spec-value">4K UHD <small>3840 × 2160</small></div></div>
-      <div class="spec-card"><div class="spec-label">Refresh Rate</div><div class="spec-value">144Hz <small>NVIDIA G-Sync Compatible</small></div></div>
-      <div class="spec-card"><div class="spec-label">Processor</div><div class="spec-value">α9 Gen7 <small>AI-Powered</small></div></div>
-      <div class="spec-card"><div class="spec-label">HDR</div><div class="spec-value">Dolby Vision <small>HDR10, HLG</small></div></div>
-      <div class="spec-card"><div class="spec-label">Sizes</div><div class="spec-value">48″ – 97″ <small>Multiple Options</small></div></div>
-      <div class="spec-card"><div class="spec-label">OS</div><div class="spec-value">webOS 24 <small>Smart TV Platform</small></div></div>
-      <div class="spec-card"><div class="spec-label">Price From</div><div class="spec-value">$1,299 <small>55-inch model</small></div></div>
+    <p class="hero-eyebrow">Welcome to LG</p>
+    <h1 class="hero-title">Life's<br/><span>Good</span></h1>
+    <p class="hero-subtitle">Explore our latest lineup of TVs, home appliances, and more — built around your life.</p>
+    <div class="cards">
+      <a href="/tv" class="card">
+        <div class="card-icon">📺</div>
+        <div class="card-title">OLED TVs</div>
+        <div class="card-desc">Self-lit pixels, infinite contrast, and AI-powered picture quality.</div>
+        <div class="card-link">Shop TVs →</div>
+      </a>
+      <a href="/ac" class="card">
+        <div class="card-icon">❄️</div>
+        <div class="card-title">Air Conditioners</div>
+        <div class="card-desc">Dual Inverter technology for powerful, efficient, quiet cooling.</div>
+        <div class="card-link">Shop ACs →</div>
+      </a>
+      <a href="#" class="card">
+        <div class="card-icon">📱</div>
+        <div class="card-title">Mobile</div>
+        <div class="card-desc">Smartphones and accessories designed with you in mind.</div>
+        <div class="card-link">Coming Soon →</div>
+      </a>
     </div>
   </section>
-  <div class="cta-row">
-    <button class="btn-primary">Buy Now</button>
-    <button class="btn-outline">Compare Models</button>
-  </div>
 </main>
 <footer>
   <div class="footer-logo">L<span>G</span></div>
   <span>© 2024 LG Electronics. Sample site for demo purposes.</span>
   <span>Life's Good</span>
 </footer>
-<script>
-  const product = {
-    id: "LG-OLED-C4-55", name: "LG C4 OLED EVO TV", category: "Television",
-    series: "C4", displayType: "OLED EVO", resolution: "4K UHD", refreshRate: "144Hz",
-    processor: "α9 Gen7 AI", hdr: ["Dolby Vision", "HDR10", "HLG"],
-    sizes: ["48\"","55\"","65\"","77\"","83\"","97\""],
-    priceUSD: 1299, os: "webOS 24", year: 2024, viewedAt: new Date().toISOString(),
-  };
-  async function sendProductData() {
-    const statusEl = document.getElementById("apiStatus");
-    const dotEl    = document.getElementById("dot");
-    const msgEl    = document.getElementById("apiMsg");
-    try {
-      const res  = await fetch("/api/product", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(product) });
-      const data = await res.json();
-      dotEl.className   = "dot ok";
-      msgEl.textContent = data.message || "Data received by server ✓";
-      statusEl.classList.add("success");
-    } catch (err) {
-      dotEl.className   = "dot err";
-      msgEl.textContent = "API unreachable — run the server locally";
-      statusEl.classList.add("error");
-      console.error("API error:", err);
-    }
-  }
-  window.addEventListener("load", sendProductData);
-</script>
 </body>
 </html>
