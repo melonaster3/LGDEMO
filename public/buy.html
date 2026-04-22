@@ -4,12 +4,16 @@
   <meta charset="UTF-8" />
   <script type='text/javascript' src='//static.queue-it.net/script/queueclient.min.js'></script>
   <script
-   data-queueit-intercept-domain='lgdemo.vercel.app'
+   data-queueit-intercept-domain='sale-test-akamai.queue-it-demo.com'
    data-queueit-intercept='true'
    data-queueit-c='saletest'
+   data-queueit-host='sale-test-akamai.queue-it-demo.com'
+   data-queueit-queuepathprefix='/queue'
    type='text/javascript'
    src='//static.queue-it.net/script/queueconfigloader.min.js'>
 </script>
+  <!-- Queue-it iframe client -->
+  <script src='/queue-it-iframe-client/index.js'></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>LG ArtCool AC — Select Model</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -300,6 +304,9 @@
 
 </div><!-- /page -->
 
+<!-- Queue-it iframe container — managed by QueueManager -->
+<div id="queueit-container"></div>
+
 <footer>
   <div class="footer-logo">L<span>G</span></div>
   <span>© 2024 LG Electronics. Sample site for demo purposes.</span>
@@ -350,15 +357,48 @@
     document.getElementById("summaryTotal").textContent    = "$" + total;
   }
 
+  // ── Queue-it setup ────────────────────────────────────────────────
+  // TODO: replace 'saletest-waitingroom' with your actual waiting room ID
+  //       from the Queue-it Go portal.
+  // TODO: confirm queuePathPrefix matches what's configured in your
+  //       Akamai / BYO-CDN setup (e.g. '/queue').
+  var qm = new QueueItSdk.QueueManager({
+    customerId:        'saletest',
+    waitingRoomId:     'testajax',   // ← your waiting room ID
+    iframeContainerId: 'queueit-container',
+    waitingRoomDomain: 'sale-test-akamai.queue-it-demo.com',
+    queuePathPrefix:   '/queue',
+    isModal:           true,
+    skipIfCookieExist:    true,
+    cookieValidityMinutes: 20,
+    onQueuePassed: function (result) {
+      // User cleared the queue — now proceed to checkout
+      var params = new URLSearchParams({
+        model:   state.model,
+        code:    state.modelCode,
+        colour:  state.colour,
+        install: state.install,
+        price:   state.unitPrice + state.installPrice,
+      });
+      window.location.href = '/checkout?' + params.toString();
+    },
+    onQueueError: function (error) {
+      console.error('Queue-it error:', error.Message);
+      // Fail open — let the user through if Queue-it itself errors
+      var params = new URLSearchParams({
+        model:   state.model,
+        code:    state.modelCode,
+        colour:  state.colour,
+        install: state.install,
+        price:   state.unitPrice + state.installPrice,
+      });
+      window.location.href = '/checkout?' + params.toString();
+    },
+  });
+
   function goToCheckout() {
-    const params = new URLSearchParams({
-      model:    state.model,
-      code:     state.modelCode,
-      colour:   state.colour,
-      install:  state.install,
-      price:    state.unitPrice + state.installPrice,
-    });
-    window.location.href = "/checkout?" + params.toString();
+    // Intercept checkout — run through the queue first
+    qm.start();
   }
 </script>
 </body>
