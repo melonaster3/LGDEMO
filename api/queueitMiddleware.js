@@ -78,7 +78,7 @@ async function queueItMiddleware(req, res, next) {
     const contextProvider = buildContextProvider(req, res, QUEUEIT_SETTINGS);
     const queueitToken    = req.query[connector.QueueITTokenKey];
     const requestUrl      = contextProvider.getHttpRequest().getAbsoluteUri();
-    const cleanUrl        = stripQueueItToken(requestUrl);
+    const cleanUrl        = requestUrl;
 
     // Run the Queue-it validation
     const result = await connector.validateRequestByIntegrationConfig(
